@@ -2,6 +2,8 @@ package application;
 
 import entities.Contract;
 import entities.Installment;
+import services.ContractService;
+import services.PaypalService;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -22,40 +24,29 @@ public class Main {
 
         System.out.println("Enter contract data:");
         System.out.print("Number: ");
-        Integer number = sc.nextInt();
+        int number = sc.nextInt();
         sc.nextLine();
         System.out.print("Date (dd/MM/yyyy):");
         Date date = sdf.parse(sc.nextLine());
         System.out.print("Contract value: ");
         double contractValue = sc.nextDouble();
-        System.out.println("Enter number of installments ");
-        int installment = sc.nextInt();
 
         Contract c1 = new Contract(number, date, contractValue);
 
-        double installmenteValue = contractValue/installment;
+        System.out.println("Enter number of installments ");
+        int installment = sc.nextInt();
 
-        cal.setTime(date);
+        ContractService contractService = new ContractService(new PaypalService());
 
-        for(int i = 1 ; i<=installment; i++){
-        double aux = 0;
-        double total = 0;
-        aux = installmenteValue * (Math.pow(1.01,i));
-        total = aux * 1.02;
+        contractService.processContract(c1, installment);
 
-        cal.add(Calendar.MONTH,1);
+        System.out.println("Instalments:");
 
-        date = cal.getTime();
 
-            c1.addInstallment(new Installment(date,total));
-
+        for(Installment x : c1.getInstallments()){
+            System.out.println(x);
         }
 
-        System.out.println("Instalments: ");
-
-        for(Installment i : c1.getInstallments()){
-            System.out.println(i);
-        }
         sc.close();
 
     }

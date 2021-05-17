@@ -2,8 +2,6 @@ package services;
 
 public interface OnlinePaymentService {
 
-    Double paymentFee(Double ammount);
-    Double interest(Double ammount, Integer months);
-
-
+    double paymentFee(double amount);
+    double interest(double amount, int months);
 }
